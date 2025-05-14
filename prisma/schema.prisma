@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -13,3 +7,37 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model reports {
+  id            Int          @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  report_date   DateTime?    @db.Date
+  reporter_name String?      @db.VarChar(100)
+  role          String?      @db.VarChar(15)
+  room          reports_room
+  pc            String       @db.VarChar(10)
+  description   String       @db.VarChar(255)
+  attendant     String?      @db.VarChar(100)
+  action_taken  String?      @db.VarChar(255)
+}
+
+model software_requests {
+  id              Int                    @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  request_date    DateTime?              @db.Date
+  requestor_name  String                 @db.VarChar(100)
+  room            software_requests_room
+  software        String                 @db.VarChar(100)
+  attendant       String?                @db.VarChar(100)
+  commitment_date DateTime?              @db.Date
+}
+
+enum software_requests_room {
+  A203 @map("203")
+  A204 @map("204")
+}
+
+enum reports_room {
+  A203 @map("203")
+  A204 @map("204")
+}
+
+// use: npx prisma migrate dev --name nombre_migracion
