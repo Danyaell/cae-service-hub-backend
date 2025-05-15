@@ -1,40 +1,49 @@
-export const getAllSoftwareRequests = (_req: any, res: any) => {
-    res.send('Getting all Software Requests');
+import { $Enums } from "../generated/prisma";
+import { createSoftwareRequestService, deleteSoftwareRequestService, getAllSoftwareRequestsService, getSoftwareRequestService, updateSoftwareRequestService } from "../services/softwareRequests.service";
+
+export const getAllSoftwareRequests = async (_req: any, res: any) => {
+    res.send(await getAllSoftwareRequestsService().then((data) => {
+        return data;
+    }));
 };
 
-export const getSoftwareRequest = (_req: any, res: any) => {
-    res.send('Getting Software Request');
+export const getSoftwareRequest = async (req: any, res: any) => {
+    const id = parseInt(req.params.id);
+    res.send(await getSoftwareRequestService(id).then((data) => {
+        return data;
+    }));
 };
 
-export const createSoftwareRequest = (req: any, res: any) => {
-    console.log(req.body);
-    res.send('Creating a new Software Request');
+export const createSoftwareRequest = async (req: any, res: any) => {
+    const requestBody = {
+        request_date: new Date(req.body.request_date),
+        requestor_name: req.body.requestor_name,
+        room: req.body.room === '203' ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
+        software: req.body.software,
+        attendant: req.body.attendant,
+        commitment_date: new Date(req.body.commitment_date),
+    }
+    res.send(await createSoftwareRequestService(requestBody).then((data) => {
+        return data;
+    }));
 };
 
-export const updateSoftwareRequest = (_req: any, res: any) => {
-    res.send('Updating Software Request');
+export const updateSoftwareRequest = async (req: any, res: any) => {
+    const id = parseInt(req.params.id);
+    const requestBody = {
+        request_date: new Date(req.body.request_date),
+        requestor_name: req.body.requestor_name,
+        room: req.body.room === '203' ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
+        software: req.body.software,
+        attendant: req.body.attendant,
+        commitment_date: new Date(req.body.commitment_date),
+    }
+    res.send(await updateSoftwareRequestService(id, requestBody));
 };
 
-export const deleteSoftwareRequest = (_req: any, res: any) => {
-    res.send('Deleting Software Request');
-};
-
-export const getAllReports = (_req: any, res: any) => {
-    res.send('Getting all Reports');
-};
-
-export const getReport = (_req: any, res: any) => {
-    res.send('Getting Report');
-};
-
-export const createReport = (_req: any, res: any) => {
-    res.send('Creating a new Report');
-};
-
-export const updateReport = (_req: any, res: any) => {
-    res.send('Updating Report');
-};
-
-export const deleteReport = (_req: any, res: any) => {
-    res.send('Deleting Report');
+export const deleteSoftwareRequest = async (_req: any, res: any) => {
+    const id = parseInt(_req.params.id);
+    res.send(await deleteSoftwareRequestService(id).then((data) => {
+        return data;
+    }));
 };
