@@ -3,14 +3,14 @@ import {
     createReport,
     deleteReport,
     getAllReports,
-    getReport,
+    getReportById,
     updateReport
 } from "../controllers/reports.controller";
 
 const router = express.Router();
 
 router.get("/", getAllReports);
-router.get("/:id", getReport);
+router.get("/:id", getReportById);
 router.post("/", createReport);
 router.put("/:id", updateReport);
 router.delete("/:id", deleteReport);

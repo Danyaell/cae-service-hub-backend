@@ -1,7 +1,7 @@
 import express from "express";
 import {
     getAllSoftwareRequests,
-    getSoftwareRequest,
+    getSoftwareRequestById,
     createSoftwareRequest,
     updateSoftwareRequest,
     deleteSoftwareRequest,
@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllSoftwareRequests);
-router.get("/:id", getSoftwareRequest);
+router.get("/:id", getSoftwareRequestById);
 router.post("/", createSoftwareRequest);
 router.put("/:id", updateSoftwareRequest);
 router.delete("/:id", deleteSoftwareRequest);
