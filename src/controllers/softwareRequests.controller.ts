@@ -37,7 +37,7 @@ export const createSoftwareRequest = async (req: any, res: any) => {
             room: req?.body?.room === A203 ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
             software: req?.body?.software,
             attendant: req?.body?.attendant,
-            commitment_date: new Date(req?.body?.commitment_date),
+            commitment_date: req?.body?.commitment_date ? new Date(req?.body?.commitment_date) : null,
         }
         const createSoftwareRequestResponse = await createSoftwareRequestService(requestBody);
         res.status(201).send(createSoftwareRequestResponse);
@@ -59,7 +59,7 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
             room: req?.body?.room === A203 ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
             software: req?.body?.software,
             attendant: req?.body?.attendant,
-            commitment_date: new Date(req?.body?.commitment_date),
+            commitment_date: req?.body?.commitment_date ? new Date(req?.body?.commitment_date) : null,
         }
         const updateSoftwareRequestResponse = await updateSoftwareRequestService(id, requestBody);
         res.status(200).send(updateSoftwareRequestResponse);
@@ -71,6 +71,7 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
                 error: `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
+            console.log(error);
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
         }
     }
