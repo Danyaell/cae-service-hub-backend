@@ -6,6 +6,7 @@ import { API_REPORTS, API_SOFTWARE_REQUEST } from './constants/routes.const';
 
 const PORT = 3000;
 const app = express();
+
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
