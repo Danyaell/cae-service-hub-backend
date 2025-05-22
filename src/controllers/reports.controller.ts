@@ -38,8 +38,9 @@ export const createReport = async (req: any, res: any) => {
             room: req?.body?.room === A203 ? $Enums.reports_room.A203 : $Enums.reports_room.A204,
             pc: req?.body?.pc,
             description: req?.body?.description,
-            attendant: req?.body?.attendant,
+            attendant_id: req?.body?.attendant_id,
             action_taken: req?.body?.action_taken,
+            status: req?.body?.status,
         }
         const createReportResponse = await createReportService(requestBody);
         res.status(201).send(createReportResponse);
@@ -62,8 +63,9 @@ export const updateReport = async (req: any, res: any) => {
             room: req?.body?.room === A203 ? $Enums.reports_room.A203 : $Enums.reports_room.A204,
             pc: req?.body?.pc,
             description: req?.body?.description,
-            attendant: req?.body?.attendant,
+            attendant_id: req?.body?.attendant_id,
             action_taken: req?.body?.action_taken,
+            status: req?.body?.status,
         }
         const updateReportResponse = await updateReportService(id, requestBody);
         res.status(200).send(updateReportResponse);

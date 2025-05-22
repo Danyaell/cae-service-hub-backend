@@ -5,7 +5,26 @@ import { PrismaClient } from "../generated/prisma"
 const prisma = new PrismaClient();
 
 export const getAllReportsService = async () => {
-    const reports = await prisma.reports.findMany();
+    const reports = await prisma.reports.findMany({
+        select: {
+            attendant: {
+                select: {
+                    id: true,
+                    name: true,
+                    role: true,
+                }
+            },
+            action_taken: true,
+            id: true,
+            report_date: true,
+            reporter_name: true,
+            role: true,
+            room: true,
+            pc: true,
+            description: true,
+            status: true,
+        }
+    });
     if (!reports) {
         throw new Error(`${REPORTS}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
