@@ -36,8 +36,9 @@ export const createSoftwareRequest = async (req: any, res: any) => {
             requestor_name: req?.body?.requestor_name,
             room: req?.body?.room === A203 ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
             software: req?.body?.software,
-            attendant: req?.body?.attendant,
+            attendant_id: req?.body?.attendant_id,
             commitment_date: req?.body?.commitment_date ? new Date(req?.body?.commitment_date) : null,
+            status: req?.body?.status,
         }
         const createSoftwareRequestResponse = await createSoftwareRequestService(requestBody);
         res.status(201).send(createSoftwareRequestResponse);
@@ -45,6 +46,7 @@ export const createSoftwareRequest = async (req: any, res: any) => {
         if (error?.message === `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.INVALID_DATA}`) {
             res.status(422).send({ error: `${SOFTWARE_REQUEST}_${CONTROLLER_ERROR_CODES.MISSING_DATA.message}` });
         } else {
+            console.log(error);
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
         }
     }
@@ -58,8 +60,9 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
             requestor_name: req?.body?.requestor_name,
             room: req?.body?.room === A203 ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
             software: req?.body?.software,
-            attendant: req?.body?.attendant,
+            attendant_id: req?.body?.attendant_id,
             commitment_date: req?.body?.commitment_date ? new Date(req?.body?.commitment_date) : null,
+            status: req?.body?.status,
         }
         const updateSoftwareRequestResponse = await updateSoftwareRequestService(id, requestBody);
         res.status(200).send(updateSoftwareRequestResponse);

@@ -8,26 +8,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model users {
+  id                Int                 @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  name              String              @unique @db.VarChar(100)
+  password          String              @db.VarChar(255)
+  role              String?             @db.VarChar(15)
+  created_at        DateTime?           @db.DateTime
+  updated_at        DateTime?           @db.DateTime
+  attended_reports  reports[]           @relation("attended_reports")
+  attended_requests software_requests[] @relation("attended_requests")
+  notes             notes[]             @relation("user_notes")
+}
+
 model reports {
   id            Int          @id @unique(map: "id_UNIQUE") @default(autoincrement())
-  report_date   DateTime?    @db.Date
+  report_date   DateTime?    @db.DateTime
   reporter_name String?      @db.VarChar(100)
   role          String?      @db.VarChar(15)
   room          reports_room
   pc            String       @db.VarChar(10)
   description   String       @db.VarChar(255)
-  attendant     String?      @db.VarChar(100)
+  attendant_id  Int?
+  attendant     users?       @relation("attended_reports", fields: [attendant_id], references: [id])
   action_taken  String?      @db.VarChar(255)
+  status        status
+  notes         notes[]
 }
 
 model software_requests {
   id              Int                    @id @unique(map: "id_UNIQUE") @default(autoincrement())
-  request_date    DateTime?              @db.Date
+  request_date    DateTime?              @db.DateTime
   requestor_name  String                 @db.VarChar(100)
   room            software_requests_room
   software        String                 @db.VarChar(100)
-  attendant       String?                @db.VarChar(100)
-  commitment_date DateTime?              @db.Date
+  attendant_id    Int?
+  attendant       users?                 @relation("attended_requests", fields: [attendant_id], references: [id])
+  commitment_date DateTime?              @db.DateTime
+  status          status
+  notes           notes[]
+}
+
+model notes {
+  id                  Int                @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  created_date        DateTime?          @db.DateTime
+  created_by_id       Int?
+  created_by          users?             @relation("user_notes", fields: [created_by_id], references: [id])
+  content             String             @db.VarChar(255)
+  software_request_id Int?
+  software_request    software_requests? @relation(fields: [software_request_id], references: [id])
+  report_id           Int?
+  report              reports?           @relation(fields: [report_id], references: [id])
 }
 
 enum software_requests_room {
@@ -38,6 +68,14 @@ enum software_requests_room {
 enum reports_room {
   A203 @map("203")
   A204 @map("204")
+}
+
+enum status {
+  pending         @map("pending")
+  in_progress     @map("in_progress")
+  needs_attention @map("needs_attention")
+  completed       @map("completed")
+  cancelled       @map("cancelled")
 }
 
 // use: npx prisma migrate dev --name nombre_migracion

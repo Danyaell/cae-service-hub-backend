@@ -5,7 +5,24 @@ import { PrismaClient } from "../generated/prisma"
 const prisma = new PrismaClient();
 
 export const getAllSoftwareRequestsService = async () => {
-    const softwareRequests = await prisma.software_requests.findMany();
+    const softwareRequests = await prisma.software_requests.findMany({
+        select: {
+            attendant: {
+                select: {
+                    id: true,
+                    name: true,
+                    role: true,
+                }
+            },
+            commitment_date: true,
+            id: true,
+            request_date: true,
+            requestor_name: true,
+            room: true,
+            software: true,
+            status: true,
+        }
+    });
     if (!softwareRequests) {
         throw new Error(`${SOFTWARE_REQUESTS}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
