@@ -53,12 +53,14 @@ export const login = async (req: any, res: any) => {
 
         return res.status(200).send({
             message: "Login successful",
-            user: {
-                id: user.id,
-                name: user.name,
-                role: user.role,
-            },
-            token
+            data: {
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    role: user.role,
+                },
+                token
+            }
         });
     } catch (error: any) {
         if (error?.message === `${USER}_${DB_ERROR_CODES.NOT_FOUND}`) {
