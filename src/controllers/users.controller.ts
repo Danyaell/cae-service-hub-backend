@@ -3,10 +3,11 @@ import { USER } from "../constants/routes.const";
 import { deleteUserService, getAllUsersService, getUserByNameService, signinService, updateUserService } from "../services/users.service";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { AuthRequest } from "../utils/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
-export const getAllUsers = async (_req: any, res: any) => {
+export const getAllUsers = async (_req: AuthRequest, res: any) => {
     try {
         const usersResponse = await getAllUsersService();
         res.status(200).send(usersResponse);
