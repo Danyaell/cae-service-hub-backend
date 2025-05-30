@@ -8,6 +8,7 @@ export const DB_ERROR_CODES = {
 };
 
 export const CONTROLLER_ERROR_CODES = {
+    INVALID_CREDENTIALS: { code: 401, message: "INVALID_CREDENTIALS" },
     INVALID_PARAMS: { code: 400, message: "INVALID_PARAMS" },
     MISSING_DATA: { code: 422, message: "MISSING_DATA" },
     INTERNAL_SERVER_ERROR: { code: 500, message: "INTERNAL_SERVER_ERROR" },
