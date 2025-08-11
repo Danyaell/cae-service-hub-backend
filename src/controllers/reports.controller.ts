@@ -38,7 +38,7 @@ export const createReport = async (req: any, res: any) => {
             room: req?.body?.room === A203 ? $Enums.reports_room.A203 : $Enums.reports_room.A204,
             pc: req?.body?.pc,
             description: req?.body?.description,
-            attendant_id: req?.body?.attendant_id,
+            attendant_id: req?.body?.attendant,
             action_taken: req?.body?.action_taken,
             status: req?.body?.status,
         }
@@ -63,7 +63,7 @@ export const updateReport = async (req: any, res: any) => {
             room: req?.body?.room === A203 ? $Enums.reports_room.A203 : $Enums.reports_room.A204,
             pc: req?.body?.pc,
             description: req?.body?.description,
-            attendant_id: req?.body?.attendant_id,
+            attendant_id: req?.body?.attendant,
             action_taken: req?.body?.action_taken,
             status: req?.body?.status,
         }
