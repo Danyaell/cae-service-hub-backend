@@ -36,7 +36,7 @@ export const createSoftwareRequest = async (req: any, res: any) => {
             requestor_name: req?.body?.requestor_name,
             room: req?.body?.room === A203 ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
             software: req?.body?.software,
-            attendant_id: req?.body?.attendant_id,
+            attendant_id: req?.body?.attendant,
             commitment_date: req?.body?.commitment_date ? new Date(req?.body?.commitment_date) : null,
             status: req?.body?.status,
         }
@@ -60,7 +60,7 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
             requestor_name: req?.body?.requestor_name,
             room: req?.body?.room === A203 ? $Enums.software_requests_room.A203 : $Enums.software_requests_room.A204,
             software: req?.body?.software,
-            attendant_id: req?.body?.attendant_id,
+            attendant_id: req?.body?.attendant,
             commitment_date: req?.body?.commitment_date ? new Date(req?.body?.commitment_date) : null,
             status: req?.body?.status,
         }
