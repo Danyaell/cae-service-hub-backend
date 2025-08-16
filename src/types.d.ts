@@ -3,7 +3,7 @@ import { status } from './generated/prisma/index';
 
 export type Room = 203 | 204;
 export type Roles = "Estudiante" | "Docente" | "Encargado";
-export type Status = "pending" | "in_progres" | "needs_attention" | "completed" | "cancelled";
+export type Status = "pending" | "in_progress" | "needs_attention" | "completed" | "cancelled";
 
 export interface User {
     id: number,
