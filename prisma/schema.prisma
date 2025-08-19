@@ -17,7 +17,6 @@ model users {
   updated_at        DateTime?           @db.DateTime
   attended_reports  reports[]           @relation("attended_reports")
   attended_requests software_requests[] @relation("attended_requests")
-  notes             notes[]             @relation("user_notes")
 }
 
 model reports {
@@ -32,7 +31,6 @@ model reports {
   attendant     users?       @relation("attended_reports", fields: [attendant_id], references: [id])
   action_taken  String?      @db.VarChar(255)
   status        status
-  notes         notes[]
 }
 
 model software_requests {
@@ -45,19 +43,14 @@ model software_requests {
   attendant       users?                 @relation("attended_requests", fields: [attendant_id], references: [id])
   commitment_date DateTime?              @db.DateTime
   status          status
-  notes           notes[]
 }
 
-model notes {
-  id                  Int                @id @unique(map: "id_UNIQUE") @default(autoincrement())
-  created_date        DateTime?          @db.DateTime
-  created_by_id       Int?
-  created_by          users?             @relation("user_notes", fields: [created_by_id], references: [id])
-  content             String             @db.VarChar(255)
-  software_request_id Int?
-  software_request    software_requests? @relation(fields: [software_request_id], references: [id])
-  report_id           Int?
-  report              reports?           @relation(fields: [report_id], references: [id])
+model lost_items {
+  id            Int          @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  date          DateTime?    @db.DateTime
+  room          lost_items_room
+  description   String       @db.VarChar(255)
+  returned      Boolean      @default(false)
 }
 
 enum software_requests_room {
@@ -66,6 +59,11 @@ enum software_requests_room {
 }
 
 enum reports_room {
+  A203 @map("203")
+  A204 @map("204")
+}
+
+enum lost_items_room {
   A203 @map("203")
   A204 @map("204")
 }
