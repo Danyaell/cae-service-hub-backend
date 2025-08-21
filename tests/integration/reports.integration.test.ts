@@ -15,7 +15,6 @@ describe("Reports API Integration", () => {
     await prisma.$disconnect();
   });
 
-  // Crear un reporte
   it("POST /api/reports - should create a report", async () => {
     const data = {
       report_date: new Date(),
@@ -35,7 +34,6 @@ describe("Reports API Integration", () => {
     testReportId = res.body.id;
   });
 
-  // Obtener todos los reportes
   it("GET /api/reports - should return all reports", async () => {
     const res = await request(app).get("/api/reports");
     expect(res.status).toBe(200);
@@ -43,7 +41,6 @@ describe("Reports API Integration", () => {
     expect(res.body[0]).toHaveProperty("reporter_name");
   });
 
-  // Obtener reporte por ID
   it("GET /api/reports/:id - should return report by id", async () => {
     const res = await request(app).get(`/api/reports/${testReportId}`);
     expect(res.status).toBe(200);
@@ -56,7 +53,6 @@ describe("Reports API Integration", () => {
     expect(res.body).toHaveProperty("error");
   });
 
-  // Actualizar reporte
   it("PUT /api/reports/:id - should update a report", async () => {
     const updatedData = {
       report_date: new Date(),
@@ -91,7 +87,6 @@ describe("Reports API Integration", () => {
     expect(res.status).toBe(404);
   });
 
-  // Eliminar reporte
   it("DELETE /api/reports/:id - should delete a report", async () => {
     const res = await request(app).delete(`/api/reports/${testReportId}`);
     expect(res.status).toBe(200);

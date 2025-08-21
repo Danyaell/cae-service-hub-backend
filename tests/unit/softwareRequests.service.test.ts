@@ -1,66 +1,121 @@
-import request from "supertest";
-import { app } from "../../src/app";
 import prisma from "../../src/prisma";
+import { DB_ERROR_CODES } from "../../src/constants/errors.const";
+import {
+  createSoftwareRequestService,
+  deleteSoftwareRequestService,
+  getAllSoftwareRequestsService,
+  getSoftwareRequestByIdService,
+  updateSoftwareRequestService,
+} from "../../src/services/softwareRequests.service";
+import { SOFTWARE_REQUEST } from "../../src/constants/routes.const";
 
-describe("Software Requests API Integration", () => {
-  let testRequestId: number;
+describe("Software Requests Service - Database queries", () => {
+  let testSoftwareRequestId: number;
 
   beforeAll(async () => {
     await prisma.$connect();
   });
 
   afterAll(async () => {
-    await prisma.software_requests.deleteMany({});
     await prisma.$disconnect();
+    await prisma.software_requests.deleteMany({});
   });
 
-  it("POST /api/software-requests - should create a software request", async () => {
+  it("should create a request successfully", async () => {
     const data = {
       request_date: new Date(),
-      requestor_name: "Carlos",
-      room: "A203",
-      software: "Photoshop",
-      attendant: null,
+      requestor_name: "Ana",
+      room: "A204",
+      software: "VS Code",
       commitment_date: new Date(),
       status: "pending",
+      attendant_id: null,
     };
 
-    const res = await request(app).post("/api/software-requests").send(data);
-    expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("id");
-    testRequestId = res.body.id;
+    const request = await createSoftwareRequestService(data);
+    testSoftwareRequestId = request.id;
+
+    expect(request).toHaveProperty("id");
+    expect(request.requestor_name).toBe("Ana");
+    expect(request.status).toBe("pending");
   });
 
-  it("GET /api/software-requests - should return all software requests", async () => {
-    const res = await request(app).get("/api/software-requests");
-    expect(res.status).toBe(200);
-    expect(res.body.length).toBeGreaterThan(0);
+  it("should return all software requests", async () => {
+    await createSoftwareRequestService({
+      request_date: new Date(),
+      requestor_name: "Ana",
+      room: "A204",
+      software: "VS Code",
+      commitment_date: new Date(),
+      status: "pending",
+      attendant_id: null,
+    });
+
+    const requests = await getAllSoftwareRequestsService();
+    expect(requests.length).toBeGreaterThan(0);
+    expect(requests[0]).toHaveProperty("requestor_name");
   });
 
-  it("GET /api/software-requests/:id - should return a request by id", async () => {
-    const res = await request(app).get(`/api/software-requests/${testRequestId}`);
-    expect(res.status).toBe(200);
-    expect(res.body.id).toBe(testRequestId);
+  it("should get software request by id", async () => {
+    const request = await getSoftwareRequestByIdService(testSoftwareRequestId);
+    expect(request.id).toBe(testSoftwareRequestId);
   });
 
-  it("PUT /api/software-requests/:id - should update a request", async () => {
+  it("should throw error if request not found by id", async () => {
+    await expect(getSoftwareRequestByIdService(9999)).rejects.toThrow(
+      `${SOFTWARE_REQUEST}_9999_${DB_ERROR_CODES.NOT_FOUND}`
+    );
+  });
+
+  it("should update a request successfully", async () => {
     const updatedData = {
       request_date: new Date(),
-      requestor_name: "Carlos Updated",
+      requestor_name: "Anabelle",
       room: "A203",
-      software: "Illustrator",
-      attendant: null,
+      software: "VS Code",
       commitment_date: new Date(),
       status: "completed",
+      attendant_id: null,
     };
 
-    const res = await request(app).put(`/api/software-requests/${testRequestId}`).send(updatedData);
-    expect(res.status).toBe(200);
-    expect(res.body.requestor_name).toBe("Carlos Updated");
+    const updated = await updateSoftwareRequestService(
+      testSoftwareRequestId,
+      updatedData
+    );
+    expect(updated.requestor_name).toBe("Anabelle");
+    expect(updated.status).toBe("completed");
   });
 
-  it("DELETE /api/software-requests/:id - should delete a request", async () => {
-    const res = await request(app).delete(`/api/software-requests/${testRequestId}`);
-    expect(res.status).toBe(200);
+  it("should throw error if updating non-existent request", async () => {
+    const data = {
+      request_date: new Date(),
+      requestor_name: "Anabelle",
+      room: "A203",
+      software: "VS Code",
+      commitment_date: new Date(),
+      status: "completed",
+      attendant_id: null,
+    };
+
+    await expect(updateSoftwareRequestService(9999, data)).rejects.toThrow(
+      `${SOFTWARE_REQUEST}_9999_${DB_ERROR_CODES.NOT_FOUND}`
+    );
+  });
+
+  it("should delete a request successfully", async () => {
+    const deleted = await deleteSoftwareRequestService(testSoftwareRequestId);
+    expect(deleted.id).toBe(testSoftwareRequestId);
+
+    await expect(
+      getSoftwareRequestByIdService(testSoftwareRequestId)
+    ).rejects.toThrow(
+      `${SOFTWARE_REQUEST}_${testSoftwareRequestId}_${DB_ERROR_CODES.NOT_FOUND}`
+    );
+  });
+
+  it("should throw error if deleting non-existent request", async () => {
+    await expect(deleteSoftwareRequestService(9999)).rejects.toThrow(
+      `${SOFTWARE_REQUEST}_9999_${DB_ERROR_CODES.NOT_FOUND}`
+    );
   });
 });

@@ -2,6 +2,7 @@ import request from "supertest";
 import prisma from "../../src/prisma";
 import { DB_ERROR_CODES } from "../../src/constants/errors.const";
 import { app } from "../../src/app";
+import { A203 } from "../../src/constants/common.const";
 
 describe("Software Requests API Integration", () => {
   let testRequestId: number;
@@ -19,7 +20,7 @@ describe("Software Requests API Integration", () => {
     const data = {
       request_date: new Date(),
       requestor_name: "Carlos",
-      room: "A203",
+      room: A203,
       software: "Photoshop",
       attendant: null,
       commitment_date: new Date(),
@@ -55,7 +56,7 @@ describe("Software Requests API Integration", () => {
     const updatedData = {
       request_date: new Date(),
       requestor_name: "Carlos Updated",
-      room: "A203",
+      room: A203,
       software: "Illustrator",
       attendant: null,
       commitment_date: new Date(),
@@ -73,7 +74,7 @@ describe("Software Requests API Integration", () => {
     const data = {
       request_date: new Date(),
       requestor_name: "Fake",
-      room: "A203",
+      room: A203,
       software: "Nothing",
       attendant: null,
       commitment_date: new Date(),

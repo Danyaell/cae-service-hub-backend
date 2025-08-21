@@ -79,7 +79,6 @@ export const updateReport = async (req: any, res: any) => {
                 error: `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
-            console.log(error);
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
         }
     }

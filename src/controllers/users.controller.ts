@@ -75,8 +75,9 @@ export const login = async (req: any, res: any) => {
 };
 
 export const updateUser = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const requestBody = {
             name: req?.body?.name,
             password: await bcrypt.hash(req?.body?.password, 10),
@@ -88,8 +89,8 @@ export const updateUser = async (req: any, res: any) => {
     } catch (error: any) {
         if (error?.message === `${USER}_${DB_ERROR_CODES.INVALID_DATA}`) {
             res.status(422).send({ error: `${USER}_${CONTROLLER_ERROR_CODES.MISSING_DATA.message}` });
-        } else if (error?.message === `${USER}_${DB_ERROR_CODES.NOT_FOUND}`) {
-            res.status(404).send({ error: `${USER}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}` });
+        } else if (error?.message === `${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
+            res.status(404).send({ error: `${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}` });
         } else {
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message, errorMessage: error.message });
         }
@@ -97,13 +98,14 @@ export const updateUser = async (req: any, res: any) => {
 };
 
 export const deleteUser = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const deleteUserResponse = await deleteUserService(id);
         res.status(200).send(deleteUserResponse);
     } catch (error: any) {
-        if (error?.message === `${USER}_${DB_ERROR_CODES.NOT_FOUND}`) {
-            res.status(404).send({ error: `${USER}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}` });
+        if (error?.message === `${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
+            res.status(404).send({ error: `${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}` });
         } else {
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
         }

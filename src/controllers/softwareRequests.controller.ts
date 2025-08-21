@@ -47,7 +47,6 @@ export const createSoftwareRequest = async (req: any, res: any) => {
         if (error?.message === `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.INVALID_DATA}`) {
             res.status(422).send({ error: `${SOFTWARE_REQUEST}_${CONTROLLER_ERROR_CODES.MISSING_DATA.message}` });
         } else {
-            console.log(error);
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
         }
     }
@@ -76,7 +75,6 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
                 error: `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
-            console.log(error);
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
         }
     }

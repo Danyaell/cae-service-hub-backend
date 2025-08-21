@@ -9,7 +9,7 @@ import {
 import { REPORT } from "../../src/constants/routes.const";
 import { DB_ERROR_CODES } from "../../src/constants/errors.const";
 
-describe("Reports Service", () => {
+describe("Reports Service - Database queries", () => {
   let testReportId: number;
 
   beforeAll(async () => {
@@ -21,7 +21,6 @@ describe("Reports Service", () => {
     await prisma.reports.deleteMany({});
   });
 
-  // Crear un reporte
   it("should create a report successfully", async () => {
     const data = {
       report_date: new Date(),
@@ -42,8 +41,6 @@ describe("Reports Service", () => {
     expect(report.reporter_name).toBe("Juan");
     expect(report.status).toBe("pending");
   });
-
-  // Obtener todos los reportes
   it("should return all reports", async () => {
     await createReportService({
       report_date: new Date(),
@@ -62,7 +59,6 @@ describe("Reports Service", () => {
     expect(reports[0]).toHaveProperty("reporter_name");
   });
 
-  // Obtener reporte por id
   it("should get report by id", async () => {
     const report = await getReportByIdService(testReportId);
     expect(report.id).toBe(testReportId);
@@ -74,7 +70,6 @@ describe("Reports Service", () => {
     );
   });
 
-  // Actualizar reporte
   it("should update a report successfully", async () => {
     const updatedData = {
       report_date: new Date(),
@@ -111,7 +106,6 @@ describe("Reports Service", () => {
     );
   });
 
-  // Eliminar reporte
   it("should delete a report successfully", async () => {
     const deleted = await deleteReportService(testReportId);
     expect(deleted.id).toBe(testReportId);
