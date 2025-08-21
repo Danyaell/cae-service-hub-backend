@@ -14,7 +14,6 @@ export interface User {
     updatedAt: Date,
     attendedReports: Report[],
     attendedSoftwareRequests: SoftwareRequest[],
-    notes: Note[],
 };
 
 export interface SoftwareRequest {
@@ -39,13 +38,4 @@ export interface Report {
     attendantId: number,
     actionTaken: string,
     status: Status,
-};
-
-export interface Note {
-    id: number,
-    createdDate: Date,
-    createdBy: number,
-    content: string,
-    softwareRequest: number,
-    report: number,
 };

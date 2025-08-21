@@ -14,14 +14,15 @@ export const getAllReports = async (_req: any, res: any) => {
 };
 
 export const getReportById = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const reportResponse = await getReportByIdService(id);
         res.status(200).send(reportResponse);
     } catch (error: any) {
-        if (error?.message === `${REPORT}_${DB_ERROR_CODES.NOT_FOUND}`) {
+        if (error?.message === `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
             res.status(404).send({
-                error: `${REPORT}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
+                error: `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
@@ -54,8 +55,9 @@ export const createReport = async (req: any, res: any) => {
 };
 
 export const updateReport = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const requestBody = {
             report_date: new Date(req?.body?.report_date),
             reporter_name: req?.body?.reporter_name,
@@ -72,9 +74,9 @@ export const updateReport = async (req: any, res: any) => {
     } catch (error: any) {
         if (error?.message === `${REPORT}_${DB_ERROR_CODES.INVALID_DATA}`) {
             res.status(422).send({ error: `${REPORT}_${CONTROLLER_ERROR_CODES.MISSING_DATA.message}` });
-        } else if (error?.message === `${REPORT}_${DB_ERROR_CODES.NOT_FOUND}`) {
+        } else if (error?.message === `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
             res.status(404).send({
-                error: `${REPORT}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
+                error: `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
             console.log(error);
@@ -84,14 +86,15 @@ export const updateReport = async (req: any, res: any) => {
 };
 
 export const deleteReport = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const deleteReportResponse = await deleteReportService(id);
         res.status(200).send(deleteReportResponse);
     } catch (error: any) {
-        if (error?.message === `${REPORT}_${DB_ERROR_CODES.NOT_FOUND}`) {
+        if (error?.message === `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
             res.status(404).send({
-                error: `${REPORT}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
+                error: `${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });

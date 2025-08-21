@@ -14,14 +14,15 @@ export const getAllSoftwareRequests = async (_req: any, res: any) => {
 };
 
 export const getSoftwareRequestById = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const SoftwareRequestResponse = await getSoftwareRequestByIdService(id);
         res.status(200).send(SoftwareRequestResponse);
     } catch (error: any) {
-        if (error?.message === `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}`) {
+        if (error?.message === `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
             res.status(404).send({
-                error: `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
+                error: `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
@@ -53,8 +54,9 @@ export const createSoftwareRequest = async (req: any, res: any) => {
 };
 
 export const updateSoftwareRequest = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const requestBody = {
             request_date: new Date(req?.body?.request_date),
             requestor_name: req?.body?.requestor_name,
@@ -69,9 +71,9 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
     } catch (error: any) {
         if (error?.message === `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.INVALID_DATA}`) {
             res.status(422).send({ error: `${SOFTWARE_REQUEST}_${CONTROLLER_ERROR_CODES.MISSING_DATA.message}` });
-        } else if (error?.message === `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}`) {
+        } else if (error?.message === `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
             res.status(404).send({
-                error: `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
+                error: `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
             console.log(error);
@@ -81,14 +83,15 @@ export const updateSoftwareRequest = async (req: any, res: any) => {
 };
 
 export const deleteSoftwareRequest = async (req: any, res: any) => {
+    let id;
     try {
-        const id = parseInt(req?.params?.id);
+        id = parseInt(req?.params?.id);
         const deleteSoftwareRequestResponse = await deleteSoftwareRequestService(id);
         res.status(200).send(deleteSoftwareRequestResponse);
     } catch (error: any) {
-        if (error?.message === `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}`) {
+        if (error?.message === `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}`) {
             res.status(404).send({
-                error: `${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
+                error: `${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}_${CONTROLLER_ERROR_CODES.INVALID_PARAMS.message}`
             });
         } else {
             res.status(500).send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
