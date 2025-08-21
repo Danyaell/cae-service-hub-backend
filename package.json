@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:magrate:deploy": "prisma migrate deploy",
+    "postinstall": "prisma generate",
     "lint": "ts-standard",
     "tsc": "tsc",
-    "start": "node build/index.js",
     "test": "cross-env NODE_ENV=test dotenv -e .env.test -- jest --runInBand",
     "migrate:test": "cross-env NODE_ENV=test dotenv -e .env.test -- prisma migrate dev --name init --schema=prisma/schema.prisma"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [],
   "author": "",
