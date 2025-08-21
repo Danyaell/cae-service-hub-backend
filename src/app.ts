@@ -18,11 +18,15 @@ import {
  */
 export const app = express();
 
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
+  .split(",")
+  .map(o => o.trim());
+
 /**
  * Enables CORS for the frontend application.
  */
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true,
 }));
 
