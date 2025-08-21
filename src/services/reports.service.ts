@@ -2,68 +2,92 @@ import { DB_ERROR_CODES } from "../constants/errors.const";
 import { REPORT, REPORTS } from "../constants/routes.const";
 import prisma from "../prisma";
 
+/**
+ * Retrieves all reports from the database.
+ */
 export const getAllReportsService = async () => {
-    const reports = await prisma.reports.findMany({
+  const reports = await prisma.reports.findMany({
+    select: {
+      attendant: {
         select: {
-            attendant: {
-                select: {
-                    id: true,
-                    name: true,
-                    role: true,
-                }
-            },
-            action_taken: true,
-            id: true,
-            report_date: true,
-            reporter_name: true,
-            role: true,
-            room: true,
-            pc: true,
-            description: true,
-            status: true,
-        }
-    });
-    if (!reports) {
-        throw new Error(`${REPORTS}_${DB_ERROR_CODES.NOT_FOUND}`);
-    }
-    return reports;
+          id: true,
+          name: true,
+          role: true,
+        },
+      },
+      action_taken: true,
+      id: true,
+      report_date: true,
+      reporter_name: true,
+      role: true,
+      room: true,
+      pc: true,
+      description: true,
+      status: true,
+    },
+  });
+  if (!reports) {
+    throw new Error(`${REPORTS}_${DB_ERROR_CODES.NOT_FOUND}`);
+  }
+  return reports;
+};
 
-}
-
+/**
+ * Retrieves a single report by ID.
+ * @param id - The ID of the report to retrieve.
+ */
 export const getReportByIdService = async (id: number) => {
-    if (!id) {
-        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
-    }
-    const report = await prisma.reports.findUnique({ where: { id } });
-    if (!report) {
-        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
-    }
-    return report;
-}
+  if (!id) {
+    throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
+  }
+  const report = await prisma.reports.findUnique({ where: { id } });
+  if (!report) {
+    throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
+  }
+  return report;
+};
 
+/**
+ * Creates a new report.
+ * @param data - The data for the new report.
+ */
 export const createReportService = async (data: any) => {
-    if (!data?.report_date || !data?.room || !data?.pc || !data?.description) {
-        throw new Error(`${REPORT}_${DB_ERROR_CODES.INVALID_DATA}`);
-    }
-    const createdReport = await prisma.reports.create({ data });
-    return createdReport;
-
+  if (!data?.report_date || !data?.room || !data?.pc || !data?.description) {
+    throw new Error(`${REPORT}_${DB_ERROR_CODES.INVALID_DATA}`);
+  }
+  const createdReport = await prisma.reports.create({ data });
+  return createdReport;
 };
 
+/**
+ * Updates an existing report by ID.
+ * @param id - The ID of the report to update.
+ * @param data - The updated report data.
+ */
 export const updateReportService = async (id: number, data: any) => {
-    if (!data?.report_date || !data?.reporter_name || !data?.room || !data?.pc || !data?.description) {
-        throw new Error(`${REPORT}_${DB_ERROR_CODES.INVALID_DATA}`);
-    } else if (!id || !(await prisma.reports.findUnique({ where: { id } }))) {
-        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
-    }
-    const updatedReport = await prisma.reports.update({ where: { id }, data });
-    return updatedReport;
+  if (
+    !data?.report_date ||
+    !data?.reporter_name ||
+    !data?.room ||
+    !data?.pc ||
+    !data?.description
+  ) {
+    throw new Error(`${REPORT}_${DB_ERROR_CODES.INVALID_DATA}`);
+  } else if (!id || !(await prisma.reports.findUnique({ where: { id } }))) {
+    throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
+  }
+  const updatedReport = await prisma.reports.update({ where: { id }, data });
+  return updatedReport;
 };
 
+/**
+ * Deletes a report by ID.
+ * @param id - The ID of the report to delete.
+ */
 export const deleteReportService = async (id: number) => {
-    if (!id ||!(await prisma.reports.findUnique({ where: { id } }))) {
-        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
-    }
-    const deletedReport = await prisma.reports.delete({ where: { id } });
-    return deletedReport;
+  if (!id || !(await prisma.reports.findUnique({ where: { id } }))) {
+    throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
+  }
+  const deletedReport = await prisma.reports.delete({ where: { id } });
+  return deletedReport;
 };
