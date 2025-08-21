@@ -30,8 +30,8 @@ export const getAllSoftwareRequestsService = async () => {
 
 export const getSoftwareRequestByIdService = async (id: number) => {
     const softwareRequest = await prisma.software_requests.findUnique({ where: { id } });
-    if (!softwareRequest) {
-        throw new Error(`${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}`);
+    if (!id || !softwareRequest) {
+        throw new Error(`${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     return softwareRequest;
 }
@@ -48,16 +48,16 @@ export const createSoftwareRequestService = async (data: any) => {
 export const updateSoftwareRequestService = async (id: number, data: any) => {
     if (!data?.request_date || !data?.requestor_name || !data?.room || !data?.software) {
         throw new Error(`${SOFTWARE_REQUEST}_${DB_ERROR_CODES.INVALID_DATA}`);
-    } else if (!(await prisma.software_requests.findUnique({ where: { id } }))) {
-        throw new Error(`${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}`);
+    } else if (!id || !(await prisma.software_requests.findUnique({ where: { id } }))) {
+        throw new Error(`${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     const updatedSoftwareRequest = await prisma.software_requests.update({ where: { id }, data });
     return updatedSoftwareRequest;
 };
 
 export const deleteSoftwareRequestService = async (id: number) => {
-    if (!(await prisma.software_requests.findUnique({ where: { id } }))) {
-        throw new Error(`${SOFTWARE_REQUEST}_${DB_ERROR_CODES.NOT_FOUND}`);
+    if (!id || !(await prisma.software_requests.findUnique({ where: { id } }))) {
+        throw new Error(`${SOFTWARE_REQUEST}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     const deletedSoftwareRequest = await prisma.software_requests.delete({ where: { id } });
     return deletedSoftwareRequest;

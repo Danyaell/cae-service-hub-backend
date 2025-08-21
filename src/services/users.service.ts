@@ -20,16 +20,16 @@ export const getAllUsersService = async () => {
 
 export const getUserByIdService = async (id: number) => {
     const user = await prisma.users.findUnique({ where: { id } });
-    if (!user) {
-        throw new Error(`${USER}_${DB_ERROR_CODES.NOT_FOUND}`);
+    if (!id || !user) {
+        throw new Error(`${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     return user;
 };
 
 export const getUserByNameService = async (name: string) => {
     const user = await prisma.users.findUnique({ where: { name } });
-    if (!user) {
-        throw new Error(`${USER}_${DB_ERROR_CODES.NOT_FOUND}`);
+    if (!name || !user) {
+        throw new Error(`${USER}_${name}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     return user;
 };
@@ -56,8 +56,8 @@ export const signinService = async (data: any) => {
 export const updateUserService = async (id: number, data: any) => {
     if (!data?.name || !data?.password || !data?.role) {
         throw new Error(`${USER}_${DB_ERROR_CODES.INVALID_DATA}`);
-    } else if (!(await prisma.users.findUnique({ where: { id } }))) {
-        throw new Error(`${USER}_${DB_ERROR_CODES.NOT_FOUND}`);
+    } else if (!id || !(await prisma.users.findUnique({ where: { id } }))) {
+        throw new Error(`${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     const updatedUser = await prisma.users.update({ where: { id }, data });
     return {
@@ -70,8 +70,8 @@ export const updateUserService = async (id: number, data: any) => {
 };
 
 export const deleteUserService = async (id: number) => {
-    if (!(await prisma.users.findUnique({ where: { id } }))) {
-        throw new Error(`${USER}_${DB_ERROR_CODES.NOT_FOUND}`);
+    if (!id || !(await prisma.users.findUnique({ where: { id } }))) {
+        throw new Error(`${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     const deletedUser = await prisma.users.delete({ where: { id } });
     return deletedUser;

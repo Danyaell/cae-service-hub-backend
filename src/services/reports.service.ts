@@ -31,9 +31,12 @@ export const getAllReportsService = async () => {
 }
 
 export const getReportByIdService = async (id: number) => {
+    if (!id) {
+        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
+    }
     const report = await prisma.reports.findUnique({ where: { id } });
     if (!report) {
-        throw new Error(`${REPORT}_${DB_ERROR_CODES.NOT_FOUND}`);
+        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     return report;
 }
@@ -50,16 +53,16 @@ export const createReportService = async (data: any) => {
 export const updateReportService = async (id: number, data: any) => {
     if (!data?.report_date || !data?.reporter_name || !data?.room || !data?.pc || !data?.description) {
         throw new Error(`${REPORT}_${DB_ERROR_CODES.INVALID_DATA}`);
-    } else if (!(await prisma.reports.findUnique({ where: { id } }))) {
-        throw new Error(`${REPORT}_${DB_ERROR_CODES.NOT_FOUND}`);
+    } else if (!id || !(await prisma.reports.findUnique({ where: { id } }))) {
+        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     const updatedReport = await prisma.reports.update({ where: { id }, data });
     return updatedReport;
 };
 
 export const deleteReportService = async (id: number) => {
-    if (!(await prisma.reports.findUnique({ where: { id } }))) {
-        throw new Error(`${REPORT}_${DB_ERROR_CODES.NOT_FOUND}`);
+    if (!id ||!(await prisma.reports.findUnique({ where: { id } }))) {
+        throw new Error(`${REPORT}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
     }
     const deletedReport = await prisma.reports.delete({ where: { id } });
     return deletedReport;
