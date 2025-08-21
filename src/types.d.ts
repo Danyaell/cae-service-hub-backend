@@ -1,5 +1,3 @@
-import { status } from './generated/prisma/index';
-
 //
 // ─── ENUMS & TYPE ALIASES ───────────────────────────────────────────────
 //

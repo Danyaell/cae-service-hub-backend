@@ -1,10 +1,10 @@
+import { $Enums } from "@prisma/client";
 import { A203 } from "../constants/common.const";
 import {
   CONTROLLER_ERROR_CODES,
   DB_ERROR_CODES,
 } from "../constants/errors.const";
 import { REPORT } from "../constants/routes.const";
-import { $Enums } from "../generated/prisma";
 import {
   createReportService,
   deleteReportService,
