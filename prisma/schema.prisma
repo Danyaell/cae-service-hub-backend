@@ -8,66 +8,141 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//
+// ─── MODELS ───────────────────────────────────────────────────────────────
+//
+
+/// Represents an application user.
 model users {
+  /// Unique identifier for the user.
   id                Int                 @id @unique(map: "id_UNIQUE") @default(autoincrement())
+
+  /// User's full name.
   name              String              @unique @db.VarChar(100)
+
+  /// User's encrypted password.
   password          String              @db.VarChar(255)
+
+  /// User role (e.g., student, teacher, admin).
   role              String?             @db.VarChar(15)
+
+  /// Timestamp of user creation.
   created_at        DateTime?           @db.DateTime
+
+  /// Timestamp of the last user update.
   updated_at        DateTime?           @db.DateTime
+
+  /// Reports attended by this user.
   attended_reports  reports[]           @relation("attended_reports")
+
+  /// Software requests attended by this user.
   attended_requests software_requests[] @relation("attended_requests")
 }
 
+/// Represents a technical or support report.
 model reports {
   id            Int          @id @unique(map: "id_UNIQUE") @default(autoincrement())
+
+  /// Date the report was submitted.
   report_date   DateTime?    @db.DateTime
+
+  /// Name of the person who submitted the report.
   reporter_name String?      @db.VarChar(100)
+
+  /// Role of the reporter.
   role          String?      @db.VarChar(15)
+
+  /// Room where the issue occurred.
   room          reports_room
+
+  /// Identifier of the PC involved.
   pc            String       @db.VarChar(10)
+
+  /// Description of the issue.
   description   String       @db.VarChar(255)
+
+  /// ID of the user who attended the report.
   attendant_id  Int?
+
+  /// User who attended the report.
   attendant     users?       @relation("attended_reports", fields: [attendant_id], references: [id])
+
+  /// Actions taken to resolve the issue.
   action_taken  String?      @db.VarChar(255)
+
+  /// Current status of the report.
   status        status
 }
 
+/// Represents a software installation or access request.
 model software_requests {
   id              Int                    @id @unique(map: "id_UNIQUE") @default(autoincrement())
+
+  /// Date the request was submitted.
   request_date    DateTime?              @db.DateTime
+
+  /// Name of the person who submitted the request.
   requestor_name  String                 @db.VarChar(100)
+
+  /// Room where the request applies.
   room            software_requests_room
+
+  /// Requested software name.
   software        String                 @db.VarChar(100)
+
+  /// ID of the user assigned to the request.
   attendant_id    Int?
+
+  /// User who is attending the request.
   attendant       users?                 @relation("attended_requests", fields: [attendant_id], references: [id])
+
+  /// Date by which the request should be fulfilled.
   commitment_date DateTime?              @db.DateTime
+
+  /// Current status of the request.
   status          status
 }
 
+/// Represents a lost item reported in a room.
 model lost_items {
   id            Int          @id @unique(map: "id_UNIQUE") @default(autoincrement())
+
+  /// Date the item was lost or found.
   date          DateTime?    @db.DateTime
+
+  /// Room where the item was found.
   room          lost_items_room
+
+  /// Description of the item.
   description   String       @db.VarChar(255)
+
+  /// Whether the item has been returned to its owner.
   returned      Boolean      @default(false)
 }
 
+//
+// ─── ENUMS ───────────────────────────────────────────────────────────────
+//
+
+/// Rooms available for software requests.
 enum software_requests_room {
   A203 @map("203")
   A204 @map("204")
 }
 
+/// Rooms available for technical reports.
 enum reports_room {
   A203 @map("203")
   A204 @map("204")
 }
 
+/// Rooms where lost items are reported.
 enum lost_items_room {
   A203 @map("203")
   A204 @map("204")
 }
 
+/// Status values shared across reports and requests.
 enum status {
   pending         @map("pending")
   in_progress     @map("in_progress")
@@ -75,5 +150,3 @@ enum status {
   completed       @map("completed")
   cancelled       @map("cancelled")
 }
-
-// use: npx prisma migrate dev --name nombre_migracion
