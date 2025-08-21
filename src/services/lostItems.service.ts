@@ -1,8 +1,6 @@
 import { DB_ERROR_CODES } from "../constants/errors.const";
 import { LOST_ITEM, LOST_ITEMS } from "../constants/routes.const";
-import { PrismaClient } from "../generated/prisma"
-
-const prisma = new PrismaClient();
+import prisma from "../prisma";
 
 export const getAllLostItemsService = async () => {
 	const lostItems = await prisma.lost_items.findMany({

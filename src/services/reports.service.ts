@@ -1,8 +1,6 @@
 import { DB_ERROR_CODES } from "../constants/errors.const";
 import { REPORT, REPORTS } from "../constants/routes.const";
-import { PrismaClient } from "../generated/prisma"
-
-const prisma = new PrismaClient();
+import prisma from "../prisma";
 
 export const getAllReportsService = async () => {
     const reports = await prisma.reports.findMany({

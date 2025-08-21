@@ -1,8 +1,6 @@
 import { DB_ERROR_CODES } from "../constants/errors.const";
 import { SOFTWARE_REQUEST, SOFTWARE_REQUESTS } from "../constants/routes.const";
-import { PrismaClient } from "../generated/prisma"
-
-const prisma = new PrismaClient();
+import prisma from "../prisma";
 
 export const getAllSoftwareRequestsService = async () => {
     const softwareRequests = await prisma.software_requests.findMany({
