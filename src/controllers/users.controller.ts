@@ -6,6 +6,7 @@ import { USER } from "../constants/routes.const";
 import {
   deleteUserService,
   getAllUsersService,
+  getUserByIdService,
   getUserByNameService,
   signinService,
   updateUserService,
@@ -23,6 +24,22 @@ export const getAllUsers = async (_req: AuthRequest, res: any) => {
   try {
     const usersResponse = await getAllUsersService();
     res.status(200).send(usersResponse);
+  } catch (error: any) {
+    res
+      .status(500)
+      .send({ error: CONTROLLER_ERROR_CODES.INTERNAL_SERVER_ERROR.message });
+  }
+};
+
+/**
+ * Retrieves a user by ID.
+ */
+export const getUserById = async (_req: AuthRequest, res: any) => {
+  let id;
+  try {
+    id = parseInt(_req?.params?.id);
+    const userResponse = await getUserByIdService(id);
+    res.status(200).send(userResponse);
   } catch (error: any) {
     res
       .status(500)

@@ -2,6 +2,7 @@ import express from "express";
 import {
   deleteUser,
   getAllUsers,
+  getUserById,
   login,
   signin,
   updateUser,
@@ -14,6 +15,12 @@ const router = express.Router();
  * Returns all registered users.
  */
 router.get("/", getAllUsers);
+
+/**
+ * GET /users
+ * Returns all registered users.
+ */
+router.get("/:id", getUserById);
 
 /**
  * POST /users/register

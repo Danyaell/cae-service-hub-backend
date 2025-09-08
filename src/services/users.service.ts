@@ -30,7 +30,13 @@ export const getUserByIdService = async (id: number) => {
   if (!id || !user) {
     throw new Error(`${USER}_${id}_${DB_ERROR_CODES.NOT_FOUND}`);
   }
-  return user;
+  return {
+    id: user.id,
+    name: user.name,
+    role: user.role,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+  };
 };
 
 /**
