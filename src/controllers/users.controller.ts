@@ -59,7 +59,16 @@ export const signin = async (req: any, res: any) => {
       created_at: new Date(),
     };
     const user = await signinService(requestBody);
-    res.status(200).send(user);
+    res.status(200).send({
+      message: "Signin successful",
+      data: {
+        user: {
+          id: user.id,
+          name: user.name,
+          role: user.role,
+        }
+      },
+    });
   } catch (error: any) {
     if (error?.message === `${USER}_${DB_ERROR_CODES.DUPLICATE}`) {
       res.status(409).send({ error: `${USER}_${DB_ERROR_CODES.DUPLICATE}` });
