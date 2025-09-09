@@ -181,6 +181,7 @@ module.exports = {
 |  | `/software-requests/:id` | DELETE | Delete a software request |
 | Users | `/users` | GET | Get all users |
 | Users | `/users/:id` | GET | Get user by ID |
+|  | `/login` | POST | Login a user |
 |  | `/users` | POST | Create a user (signup) |
 |  | `/users/:id` | PUT | Update user |
 |  | `/users/:id` | DELETE | Delete user |
